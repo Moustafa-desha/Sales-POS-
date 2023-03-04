@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TreasuriesUpdateRequest;
 use App\Models\Admin\Admin;
 use App\Models\Admin\Treasuries;
+use Illuminate\Http\Request;
 
 
 class TreasuriesController extends Controller
@@ -122,5 +123,16 @@ class TreasuriesController extends Controller
 
         }
 
+    } // END Method
+
+
+    public function ajax_search(Request $request){
+
+        if ($request->ajax()){
+            $search = $request->search_by_text;
+
+            $data = Treasuries::where('name','LIKE',"%{$search}%")->orderBy('id','DESC')->paginate(PAGIANATION_COUNT);
+            return view('admin.treasuries.ajax_search',['data'=>$data]);
+        }
     }
 }

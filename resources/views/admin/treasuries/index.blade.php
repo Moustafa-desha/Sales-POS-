@@ -18,9 +18,6 @@
 
 @section('content')
 
-    <!-- DataTables -->
-    <link rel="stylesheet" href="{{ asset("assets/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.css")}}">
-
 
 <section class="content">
     <div class="row">
@@ -31,6 +28,7 @@
             <div class="card">
                 <div class="card-header" style="background-color: #80bdff">
                     <h3 class="card-title" style="margin-left:480px">بيانات الخزن</h3>
+                    <input type="hidden" id="token_search" value="{{ csrf_token() }}" />
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -44,6 +42,8 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
+
+                                <div id="ajax_response_searchDiv">
                                 @if(@isset($data))
 
                                 <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
@@ -57,7 +57,7 @@
                                     <th>حاله التفعيل</th>
                                     <th>تاريخ الاضافه</th>
                                     <th>تاريخ التحديث</th>
-                                    <th></th>
+                                    <th>الإعدادات</th>
                                     </thead>
                                     @php
                                         $i=1;
@@ -94,7 +94,6 @@
 
                                                 <button data-id="{{$info->id}}" class="btn btn-sm btn-info">المزيد</button>
                                             </td>
-
                                         </tr>
 
                                     @endforeach
@@ -103,11 +102,12 @@
                                 @else
                                 <div class="alert"> Sorry No Any Data To Show</div>
                                 @endif
+
+                                    {{$data->links()}}
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    {{$data->links()}}
                 </div>
                 <!-- /.card-body -->
             </div>
@@ -119,21 +119,9 @@
     <!-- /.row -->
 </section>
 
-    <!-- DataTables -->
-    <script src="{{ asset("assets/admin/plugins/datatables/jquery.dataTables.js")}}"></script>
-    <script src="{{ asset("assets/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.js")}}"></script>
 
-    <script>
-        $(function () {
-            $("#example1").DataTable();
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-            });
-        });
-    </script>
+@endsection
+
+@section('script')
+    <script src="{{ asset("assets/admin/js/treasuries.js")}}"></script>
 @endsection

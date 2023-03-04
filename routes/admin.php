@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // for paginator use in every controller easy to edit quickly
-define('PAGIANATION_COUNT',10);
+define('PAGIANATION_COUNT',3);
 
 Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=> 'auth:admin'],function (){
     Route::get('dashboard',[DashboardController::class,'dashboard'])->name('admin.dashboard');
@@ -40,6 +40,7 @@ Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=> 'auth:admin'
     Route::post('treasuries/store',[TreasuriesController::class,'store'])->name('admin.treasuries.store');
     Route::get('treasuries/edit/{id}',[TreasuriesController::class,'edit'])->name('admin.treasuries.edit');
     Route::post('treasuries/update/{id}',[TreasuriesController::class,'update'])->name('admin.treasuries.update');
+    Route::post('treasuries/ajax_search',[TreasuriesController::class,'ajax_search'])->name('admin.treasuries.ajax_search');
 });
 
 Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>'guest:admin'],function (){
