@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TreasuriesUpdateRequest;
 use App\Models\Admin\Admin;
 use App\Models\Admin\Treasuries;
+use App\Models\Admin\Treasuries_Delivery;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
 
 
 class TreasuriesController extends Controller
@@ -135,4 +138,115 @@ class TreasuriesController extends Controller
             return view('admin.treasuries.ajax_search',['data'=>$data]);
         }
     }
+
+    public function details($id){
+
+        try {
+
+            $com_code = auth()->user()->com_code;
+            $data = Treasuries::findOrFail($id);
+
+            $data->added_by_admin = Admin::where('id',$data->added_by)->value('name');
+            $data->updated_by_admin = Admin::where('id',$data->updated_by)->value('name');
+
+
+            $treasuries_delivery = Treasuries_Delivery::where('treasuries_id',$id)->orderBy('id','DESC')->get();
+
+            if (!empty($treasuries_delivery)){
+                foreach ($treasuries_delivery as $info){
+                    $info->name = Treasuries::where('id',$info->treasuries_can_delivery_id)->value('name');
+                    $info->added_by_admin = Admin::where('id',$info->added_by)->value('name');
+
+                }
+            }
+
+            return view('admin.treasuries.details',compact('data','treasuries_delivery'));
+
+
+
+        }catch (\Exception){
+            return redirect()->back()->with(['error'=>'something wrong']);
+        }
+
+    }// END METHOD
+
+
+    public function addTreasuriesDelivery($id){
+
+        try {
+            $com_code = auth()->user()->com_code;
+
+            $data = Treasuries::select('id','name')->find($id);
+
+            if (empty($data)){
+                return redirect()->back()->with(['error'=>'غير قادر للوصول الي البيانات المطلوبه']);
+            }
+            $treasuries= Treasuries::select('id','name')->where(['com_code'=>$com_code,'active'=>1])->get();
+
+            return view('admin.treasuries.add_treasuriesDelivery',compact('treasuries','data'));
+
+
+
+        }catch (\Exception $e){
+            return redirect()->back()->with(['error'=>'something wrong'.$e->getMessage()]);
+        }
+
+    } //END METHOD
+
+
+    public function storeTreasuriesDelivery($id,Request $request){
+
+        $validator = Validator::make($request->all(),[
+            'treasuries_can_delivery_id' => 'required',
+            ],
+            ['treasuries_can_delivery_id.required' => 'هذا الحقل مطلوب']);
+
+        if ($validator->fails()){
+            return redirect()->back()->withErrors($validator)->withInput($request->all());
+        }
+
+        try {
+
+            $com_code = auth()->user()->com_code;
+
+            $data = Treasuries::select('id','name')->find($id);
+
+            if (empty($data)){
+                return redirect()->back()->with(['error'=>'غير قادر للوصول الي البيانات المطلوبه']);
+            }
+
+
+            $checkExists = Treasuries_Delivery::where(['treasuries_id'=>$id,'treasuries_can_delivery_id'=>$request->treasuries_can_delivery_id,'com_code'=>$com_code])->first();
+            if (!empty($checkExists)){
+                return redirect()->back()->with(['error'=>'هذه الخزنه مضافه بالفعل من قبل'])->withInput();
+            }
+
+            $newData['treasuries_id'] = $id;
+            $newData['treasuries_can_delivery_id'] = $request->treasuries_can_delivery_id;
+            $newData['com_code'] = $com_code;
+            $newData['added_by'] = auth()->id();
+
+
+            Treasuries_Delivery::create($newData);
+            return redirect()->route('admin.treasuries.details',$id)->with(['success'=>'تم إضافه الخزنه بنجاح']);
+
+
+        }catch (\Exception $e){
+            return redirect()->back()->with(['error'=>'something wrong'.$e->getMessage()]);
+
+        }
+    } //END METHOD
+
+
+    public function deleteTreasuriesDelivery($id){
+
+
+            $data = Treasuries_Delivery::findOrFail($id);
+            $data->delete();
+            return redirect()->back()->with(['success'=>'تم الحذف بنجاح']);
+
+
+    }
+
+
 }

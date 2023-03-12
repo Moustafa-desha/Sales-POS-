@@ -23,6 +23,7 @@
         <div class="container-fluid">
         @include('admin.includes.alert.error')
         @include('admin.includes.alert.success')
+
             @yield('content')
 
             <!-- /.row -->

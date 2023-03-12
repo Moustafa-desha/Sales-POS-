@@ -4,6 +4,7 @@
 use App\Http\Controllers\Admin\Admin_Panel_SettingsController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\Sales_Matiral_TypesController;
 use App\Http\Controllers\Admin\TreasuriesController;
 use Illuminate\Support\Facades\Route;
 
@@ -41,7 +42,25 @@ Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=> 'auth:admin'
     Route::get('treasuries/edit/{id}',[TreasuriesController::class,'edit'])->name('admin.treasuries.edit');
     Route::post('treasuries/update/{id}',[TreasuriesController::class,'update'])->name('admin.treasuries.update');
     Route::post('treasuries/ajax_search',[TreasuriesController::class,'ajax_search'])->name('admin.treasuries.ajax_search');
+    Route::get('treasuries/details/{id}',[TreasuriesController::class,'details'])->name('admin.treasuries.details');
+    Route::get('treasuries/add/treasuries_delivery/{id}',[TreasuriesController::class,'addTreasuriesDelivery'])->name('admin.treasuries.addTreasuriesDelivery');
+    Route::post('treasuries/store/treasuries_delivery/{id}',[TreasuriesController::class,'storeTreasuriesDelivery'])->name('admin.treasuries.storeTreasuriesDelivery');
+    Route::post('treasuries/delete/treasuries_delivery/{id}',[TreasuriesController::class,'deleteTreasuriesDelivery'])->name('admin.treasuries.deleteTreasuriesDelivery');
+
+
+//  Sales_Matiral_TypesController
+    Route::get('sales_matiral_types/index',[Sales_Matiral_TypesController::class,'index'])->name('admin.sales_matiral_types.index');
+    Route::post('sales_matiral_types/store',[Sales_Matiral_TypesController::class,'store'])->name('admin.sales_matiral_types.store');
+    Route::post('sales_matiral_types/update/{id}',[Sales_Matiral_TypesController::class,'update'])->name('admin.sales_matiral_types.update');
+    Route::post('sales_matiral_types/delete/{id}',[Sales_Matiral_TypesController::class,'delete'])->name('admin.sales_matiral_types.delete');
+
 });
+
+
+
+
+
+
 
 Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>'guest:admin'],function (){
     Route::get('login',[LoginController::class,'show'])->name('admin.loginView');

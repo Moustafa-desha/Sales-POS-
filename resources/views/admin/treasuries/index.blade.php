@@ -33,13 +33,7 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                     <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                        <div class="row">
-                            <div class="col-sm-12 col-md-6">
-                            </div>
-                            <div class="col-sm-12 col-md-6">
 
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-sm-12">
 
@@ -70,7 +64,7 @@
                                             <td>@if($info->is_master==1) رئيسيه @elseفرعيه@endif</td>
                                             <td>{{$info->last_receipt_exchange}}</td>
                                             <td>{{$info->last_receipt_collect}}</td>
-                                            <td>@if($info->active==1) مفعل@else معطل @endif</td>
+                                            <td>@if($info->active==1) مفعله@else معطله @endif</td>
                                             <td>
                                                 @if($info['created_at'])
                                                     {{$info['created_at']->format('Y-m-d | H:iA')}}
@@ -91,8 +85,7 @@
                                             </td>
                                             <td>
                                                 <a href="{{route('admin.treasuries.edit',$info->id)}}" class="btn btn-sm btn-primary" style="margin-bottom: 4px">تعديل</a>
-
-                                                <button data-id="{{$info->id}}" class="btn btn-sm btn-info">المزيد</button>
+                                                <a href="{{route('admin.treasuries.details',$info->id)}}"   class="btn btn-sm btn-info">المزيد</a>
                                             </td>
                                         </tr>
 
@@ -101,9 +94,10 @@
                                 </table>
                                 @else
                                 <div class="alert"> Sorry No Any Data To Show</div>
-                                @endif
 
                                     {{$data->links()}}
+
+                                    @endif
                                 </div>
                             </div>
                         </div>

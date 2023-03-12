@@ -39,6 +39,7 @@ class TreasuriesUpdateRequest extends FormRequest
     {
         return[
             'name.required' => 'اسم الخزنه مطلوب',
+            'name.unique' => 'اسم الخزنه موجود من قبل',
             'active.required' => 'حاله الخزنه مطلوبه',
             'is_master.required' => 'نوع الخزنه مطلوب',
             'last_receipt_exchange.required' => 'اخر إيصال صرف نقديه مطلوب',

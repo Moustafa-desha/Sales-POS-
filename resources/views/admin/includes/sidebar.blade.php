@@ -35,7 +35,7 @@
 
                         <li class="nav-item">
                             <a href="{{route('admin.AdminPanelSettings.index')}}" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
+                                <i class="fa-sharp fa-solid fa-sliders"></i>
                                 <p>
                                     الضبط العام
 
@@ -46,6 +46,14 @@
                                 <i class="fa-solid fa-vault"></i>
                                 <p>
                                     بيانات الخزن
+
+                                </p>
+                            </a>
+
+                            <a href="{{route('admin.sales_matiral_types.index')}}" class="nav-link">
+                                <i class="fa-regular fa-file-invoice-dollar"></i>
+                                <p>
+                                    بيانات فئات الفواتير
 
                                 </p>
                             </a>
